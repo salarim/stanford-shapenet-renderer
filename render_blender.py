@@ -50,21 +50,21 @@ for n in tree.nodes:
 # Create input render layer node.
 render_layers = tree.nodes.new('CompositorNodeRLayers')
 
-depth_file_output = tree.nodes.new(type="CompositorNodeOutputFile")
-depth_file_output.label = 'Depth Output'
-if args.format == 'OPEN_EXR':
-  links.new(render_layers.outputs['Depth'], depth_file_output.inputs[0])
-else:
-  # Remap as other types can not represent the full range of depth.
-  map = tree.nodes.new(type="CompositorNodeMapValue")
-  # Size is chosen kind of arbitrarily, try out until you're satisfied with resulting depth map.
-  map.offset = [-0.7]
-  map.size = [args.depth_scale]
-  map.use_min = True
-  map.min = [0]
-  links.new(render_layers.outputs['Depth'], map.inputs[0])
+#depth_file_output = tree.nodes.new(type="CompositorNodeOutputFile")
+#depth_file_output.label = 'Depth Output'
+#if args.format == 'OPEN_EXR':
+#  links.new(render_layers.outputs['Depth'], depth_file_output.inputs[0])
+#else:
+#  # Remap as other types can not represent the full range of depth.
+#  map = tree.nodes.new(type="CompositorNodeMapValue")
+#  # Size is chosen kind of arbitrarily, try out until you're satisfied with resulting depth map.
+#  map.offset = [-0.7]
+#  map.size = [args.depth_scale]
+#  map.use_min = True
+#  map.min = [0]
+#  links.new(render_layers.outputs['Depth'], map.inputs[0])
 
-  links.new(map.outputs[0], depth_file_output.inputs[0])
+#  links.new(map.outputs[0], depth_file_output.inputs[0])
 
 scale_normal = tree.nodes.new(type="CompositorNodeMixRGB")
 scale_normal.blend_type = 'MULTIPLY'
@@ -78,13 +78,13 @@ bias_normal.blend_type = 'ADD'
 bias_normal.inputs[2].default_value = (0.5, 0.5, 0.5, 0)
 links.new(scale_normal.outputs[0], bias_normal.inputs[1])
 
-normal_file_output = tree.nodes.new(type="CompositorNodeOutputFile")
-normal_file_output.label = 'Normal Output'
-links.new(bias_normal.outputs[0], normal_file_output.inputs[0])
+#normal_file_output = tree.nodes.new(type="CompositorNodeOutputFile")
+#normal_file_output.label = 'Normal Output'
+#links.new(bias_normal.outputs[0], normal_file_output.inputs[0])
 
-albedo_file_output = tree.nodes.new(type="CompositorNodeOutputFile")
-albedo_file_output.label = 'Albedo Output'
-links.new(render_layers.outputs['Color'], albedo_file_output.inputs[0])
+#albedo_file_output = tree.nodes.new(type="CompositorNodeOutputFile")
+#albedo_file_output.label = 'Albedo Output'
+#links.new(render_layers.outputs['Color'], albedo_file_output.inputs[0])
 
 # Delete default cube
 bpy.data.objects['Cube'].select = True
@@ -156,18 +156,18 @@ scene.render.image_settings.file_format = 'PNG'  # set output format to .png
 from math import radians
 
 stepsize = 360.0 / args.views
-rotation_mode = 'XYZ'
+cam.rotation_mode = 'XYZ'
 
-for output_node in [depth_file_output, normal_file_output, albedo_file_output]:
-    output_node.base_path = ''
+#for output_node in [depth_file_output, normal_file_output, albedo_file_output]:
+#    output_node.base_path = ''
 
 for i in range(0, args.views):
     print("Rotation {}, {}".format((stepsize * i), radians(stepsize * i)))
 
     scene.render.filepath = fp + '_r_{0:03d}'.format(int(i * stepsize))
-    depth_file_output.file_slots[0].path = scene.render.filepath + "_depth.png"
-    normal_file_output.file_slots[0].path = scene.render.filepath + "_normal.png"
-    albedo_file_output.file_slots[0].path = scene.render.filepath + "_albedo.png"
+    #depth_file_output.file_slots[0].path = scene.render.filepath + "_depth.png"
+    #normal_file_output.file_slots[0].path = scene.render.filepath + "_normal.png"
+    #albedo_file_output.file_slots[0].path = scene.render.filepath + "_albedo.png"
 
     bpy.ops.render.render(write_still=True)  # render still
 
