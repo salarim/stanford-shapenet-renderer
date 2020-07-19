@@ -6,6 +6,7 @@
 #
 
 import argparse, sys, os
+from scipy.spatial.transform import Rotation as R
 
 parser = argparse.ArgumentParser(description='Renders given obj file by rotation a camera around it.')
 parser.add_argument('--views', type=int, default=30,
@@ -162,13 +163,16 @@ cam.rotation_mode = 'XYZ'
 #    output_node.base_path = ''
 
 for i in range(0, args.views):
-    print("Rotation {}, {}".format((stepsize * i), radians(stepsize * i)))
+    random_rot = R.random().as_euler('zxy', degrees=True)
 
-    scene.render.filepath = fp + '_r_{0:03d}'.format(int(i * stepsize))
+    print("Rotation {}: {}".format(i, random_rot))
+
+    scene.render.filepath = fp + '_r_{}'.format(str(random_rot))
     #depth_file_output.file_slots[0].path = scene.render.filepath + "_depth.png"
     #normal_file_output.file_slots[0].path = scene.render.filepath + "_normal.png"
     #albedo_file_output.file_slots[0].path = scene.render.filepath + "_albedo.png"
 
     bpy.ops.render.render(write_still=True)  # render still
-
-    b_empty.rotation_euler[2] += radians(stepsize)
+    
+    for j in range(3):
+        b_empty.rotation_euler[j] = radians(random_rot[j])
