@@ -150,8 +150,9 @@ cam_constraint.up_axis = 'UP_Y'
 b_empty = parent_obj_to_camera(cam)
 cam_constraint.target = b_empty
 
-model_identifier = os.path.split(os.path.split(args.obj)[0])[1]
-fp = os.path.join(args.output_folder, model_identifier, model_identifier)
+model_identifier = os.path.split(os.path.split(os.path.split(args.obj)[0])[0])[1]
+cat_identifier = os.path.split(os.path.split(os.path.split(os.path.split(args.obj)[0])[0])[0])[1]
+fp = os.path.join(args.output_folder, 'output', cat_identifier, model_identifier, 'render')
 scene.render.image_settings.file_format = 'PNG'  # set output format to .png
 
 from math import radians
