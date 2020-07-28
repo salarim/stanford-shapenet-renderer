@@ -120,10 +120,18 @@ bpy.ops.object.lamp_add(type='SUN')
 lamp2 = bpy.data.lamps['Sun']
 lamp2.shadow_method = 'NOSHADOW'
 lamp2.use_specular = False
-lamp2.energy = 0.015
+lamp2.energy = 0.2              # <---- more energy
 bpy.data.objects['Sun'].rotation_euler = bpy.data.objects['Lamp'].rotation_euler
 bpy.data.objects['Sun'].rotation_euler[0] += 180
 
+# Add one more light source at different location
+bpy.ops.object.lamp_add(type='SUN')
+lamp3 = bpy.data.lamps['Sun']
+lamp3.shadow_method = 'NOSHADOW'
+lamp3use_specular = False
+lamp3.energy = 0.2
+bpy.data.objects['Sun.001'].rotation_euler = bpy.data.objects['Lamp'].rotation_euler
+bpy.data.objects['Sun.001'].rotation_euler[0] += 90
 
 def parent_obj_to_camera(b_camera):
     origin = (0, 0, 0)
@@ -138,8 +146,8 @@ def parent_obj_to_camera(b_camera):
 
 
 scene = bpy.context.scene
-scene.render.resolution_x = 600
-scene.render.resolution_y = 600
+scene.render.resolution_x = 32
+scene.render.resolution_y = 32
 scene.render.resolution_percentage = 100
 scene.render.alpha_mode = 'TRANSPARENT'
 cam = scene.objects['Camera']
